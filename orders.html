@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Order - Toko Karya Cemerlang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --dark: #0f172a;
+            --gray-light: #f8fafc;
+            --gray: #64748b;
+            --text-main: #334155;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--text-main);
+        }
+
+        /* NAVBAR */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 16px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--dark);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* DASHBOARD CONTENT */
+        .dashboard {
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .stat-card.green::before {
+            background: #10b981;
+        }
+
+        .stat-card h3 {
+            color: var(--gray);
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h1 {
+            color: var(--dark);
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* TABLE */
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        td {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-main);
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-flex;
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #bfdbfe;
+        }
+
+        .price-text {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .btn-edit {
+            background: #fffbeb;
+            color: #d97706;
+            border-color: #fde68a;
+        }
+
+        .btn-edit:hover {
+            background: #fef3c7;
+            border-color: #fcd34d;
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+        .btn-delete:hover {
+            background: #fee2e2;
+            border-color: #fca5a5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: var(--gray);
+        }
+
+        /* SPONSORS SECTION */
+        .sponsors-section {
+            padding: 40px 0 20px 0;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
+        }
+
+        .sponsors-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--gray);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+
+        .sponsors-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .sponsor-item {
+            font-size: 24px;
+            font-weight: 800;
+            color: #cbd5e1;
+            transition: var(--transition);
+            letter-spacing: -1px;
+            cursor: default;
+        }
+
+        .sponsor-item:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        @media print {
+
+            header,
+            .action-column,
+            .action-buttons,
+            .sponsors-section {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .dashboard {
+                padding: 0;
+            }
+
+            .table-container {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+
+            .stat-card {
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-title">Dashboard Orderan</div>
+        <div class="nav-buttons">
+            <form action="orders.html" method="GET" style="display: flex; align-items: center; margin-right: 15px;">
+                <label for="date-filter" style="color: var(--gray); font-size: 14px; margin-right: 8px; font-weight: 500;">📅 Pilih Tanggal:</label>
+                <input type="date" id="date-filter" name="date" value="" onchange="this.form.submit()"
+                       style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px; outline: none; font-family: 'Inter', sans-serif;">
+            </form>
+            <a href="analytics.html" class="btn btn-outline" style="margin-right: 8px;">
+                📊 Laporan
+            </a>
+            <a href="index.html" class="btn btn-outline" style="margin-right: 8px;">Menu Utama</a>
+        </div>
+    </header>
+
+    <div class="dashboard">
+
+        <div class="card-box">
+            <div class="stat-card">
+                <h3>Total Order Berhasil</h3>
+                <h1>2</h1>
+            </div>
+
+            <div class="stat-card green">
+                <h3>Total Pendapatan (Estimasi)</h3>
+                <h1>
+                    Rp 26.500.000
+                </h1>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Nama Pemesan</th>
+                    <th>Alamat</th>
+                    <th>Produk</th>
+                    <th>Pembayaran</th>
+                    <th>Harga</th>
+                    <th class="action-column">Aksi</th>
+                </tr>
+
+                <!-- Mock Order 1 -->
+                <tr>
+                    <td style="font-weight: 600;">Budi Santoso</td>
+                    <td style="color: var(--gray); font-size: 14px; max-width: 300px;">Jl. Sudirman No. 1, Jakarta Pusat</td>
+                    <td>
+                        <span class="badge">Lenovo ThinkPad X1</span>
+                    </td>
+                    <td>Transfer Bank</td>
+                    <td class="price-text">Rp 14.500.000</td>
+                    <td class="action-buttons">
+                        <a href="edit_order.html" class="btn-sm btn-edit">Edit</a>
+                        <a href="javascript:alert('Dihapus');" class="btn-sm btn-delete">Hapus</a>
+                        <a href="print_order.html" target="_blank" class="btn-sm btn-outline" style="padding: 6px 12px; font-size: 12px;">Cetak Nota</a>
+                    </td>
+                </tr>
+                
+                <!-- Mock Order 2 -->
+                <tr>
+                    <td style="font-weight: 600;">Siti Aminah</td>
+                    <td style="color: var(--gray); font-size: 14px; max-width: 300px;">Jl. Malioboro No. 2, Yogyakarta</td>
+                    <td>
+                        <span class="badge">Dell XPS 13</span>
+                    </td>
+                    <td>COD</td>
+                    <td class="price-text">Rp 12.000.000</td>
+                    <td class="action-buttons">
+                        <a href="edit_order.html" class="btn-sm btn-edit">Edit</a>
+                        <a href="javascript:alert('Dihapus');" class="btn-sm btn-delete">Hapus</a>
+                        <a href="print_order.html" target="_blank" class="btn-sm btn-outline" style="padding: 6px 12px; font-size: 12px;">Cetak Nota</a>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+
+        <!-- SPONSORS SECTION -->
+        <div class="sponsors-section">
+            <div class="sponsors-title">Sponsor Resmi</div>
+            <div class="sponsors-grid">
+                <div class="sponsor-item">ASUS ROG</div>
+                <div class="sponsor-item">Lenovo Legion</div>
+                <div class="sponsor-item">HP Omen</div>
+                <div class="sponsor-item">Dell Alienware</div>
+                <div class="sponsor-item">Acer Predator</div>
+                <div class="sponsor-item">MSI</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

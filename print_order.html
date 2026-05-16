@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Pesanan - #1234</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px; }
+        .invoice-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 30px; }
+        .logo-area h1 { margin: 0; color: #2563eb; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+        .logo-area p { margin: 5px 0 0; color: #666; font-size: 14px; }
+        .invoice-details { text-align: right; }
+        .invoice-details h2 { margin: 0 0 5px; font-size: 20px; color: #333; }
+        .invoice-details p { margin: 0; color: #666; font-size: 14px; }
+        .customer-info { margin-bottom: 40px; padding: 20px; background: #f8fafc; border-radius: 8px; }
+        .customer-info h3 { margin: 0 0 10px; font-size: 16px; color: #333; }
+        .customer-info p { margin: 5px 0; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th { background: #f1f5f9; text-align: left; padding: 12px 15px; font-weight: 600; color: #333; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        .product-name { font-weight: 600; color: #333; }
+        .total-row { font-weight: 700; font-size: 18px; }
+        .total-row td { border-top: 2px solid #333; border-bottom: none; }
+        .footer { text-align: center; margin-top: 50px; font-size: 14px; color: #666; border-top: 1px solid #eee; padding-top: 20px; }
+        .no-print { display: block; margin-bottom: 20px; text-align: right; }
+        .btn-print { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600; }
+        
+        @media print {
+            body { padding: 0; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <button class="btn-print" onclick="window.print()">Cetak Nota Sekarang</button>
+    </div>
+
+    <div class="invoice-header">
+        <div class="logo-area">
+            <h1>Toko Karya Cemerlang</h1>
+            <p>Pusat Laptop Seken Berkualitas</p>
+        </div>
+        <div class="invoice-details">
+            <h2>NOTA PESANAN</h2>
+            <p><strong>Order ID:</strong> #1234</p>
+            <p><strong>Tanggal:</strong> 16 Mei 2026</p>
+        </div>
+    </div>
+
+    <div class="customer-info">
+        <h3>Ditagihkan Kepada:</h3>
+        <p><strong>Nama:</strong> Budi Santoso</p>
+        <p><strong>Alamat Pengiriman:</strong> Jl. Sudirman No. 1, Jakarta Pusat</p>
+        <p><strong>Metode Pembayaran:</strong> Transfer Bank</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Deskripsi Produk</th>
+                <th style="text-align: right;">Jumlah</th>
+                <th style="text-align: right;">Total Harga</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="product-name">Lenovo ThinkPad X1</div>
+                    <div style="font-size: 13px; color: #666; margin-top: 4px;">Kondisi: Bekas/Seken Berkualitas</div>
+                </td>
+                <td style="text-align: right;">1</td>
+                <td style="text-align: right;">Rp 14.500.000</td>
+            </tr>
+            <tr class="total-row">
+                <td colspan="2" style="text-align: right;">Total Tagihan</td>
+                <td style="text-align: right; color: #2563eb;">Rp 14.500.000</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Terima kasih atas pesanan Anda di Toko Karya Cemerlang.</p>
+        <p style="font-size: 12px;">Barang yang sudah dibeli dan sesuai pesanan tidak dapat dikembalikan tanpa persetujuan.</p>
+    </div>
+
+    <script>
+        // Secara otomatis membuka dialog print saat halaman dimuat
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+    </script>
+</body>
+</html>
