@@ -127,8 +127,8 @@
     </style>
 </head>
 <body>
-<div style="position: absolute; top: 20px; right: 20px; font-weight: 500; color: var(--gray); background: white; padding: 8px 16px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index: 1000;">
-    📅 16 Mei 2026
+<div id="top-date-display" style="position: absolute; top: 20px; right: 20px; font-weight: 500; color: var(--gray); background: white; padding: 8px 16px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index: 1000;">
+    📅 Memuat tanggal...
 </div>
 
 <div class="checkout-wrapper">
@@ -169,7 +169,7 @@
 
             <div class="form-group">
                 <label>Tanggal Pembelian</label>
-                <input type="date" name="tanggal" class="form-control" value="2026-05-16" required>
+                <input type="date" name="tanggal" id="tanggal-input" class="form-control" required readonly>
             </div>
 
             <div class="action-buttons">
@@ -180,5 +180,45 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set auto date
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${yyyy}-${mm}-${dd}`;
+        
+        document.getElementById('tanggal-input').value = formattedDate;
+
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        const displayDate = `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+        document.getElementById('top-date-display').innerHTML = `📅 ${displayDate}`;
+
+        // Intercept form submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const order = {
+                id: Date.now().toString(),
+                nama: formData.get('nama'),
+                alamat: formData.get('alamat'),
+                metode: formData.get('metode'),
+                tanggal: formData.get('tanggal'),
+                produk: 'Lenovo ThinkPad X1', // Sesuai produk di halaman ini
+                harga: 14500000
+            };
+            
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            // Pindah ke orders.html
+            window.location.href = 'orders.html';
+        });
+    });
+</script>
 </body>
 </html>
