@@ -314,15 +314,15 @@
         <div class="card-box">
             <div class="stat-card">
                 <h3>Total Orderan Masuk</h3>
-                <h1>2 <span
+                <h1 id="stat-total-order">0 <span
                         style="font-size:14px; color:var(--text-muted); font-weight:500; text-transform:uppercase; letter-spacing:1px; text-shadow:none;">transaksi</span>
                 </h1>
             </div>
 
             <div class="stat-card green">
                 <h3>Total Pendapatan Bersih</h3>
-                <h1>
-                    Rp 26.500.000
+                <h1 id="stat-total-pendapatan">
+                    Rp 0
                 </h1>
             </div>
         </div>
@@ -330,15 +330,8 @@
         <div class="card-box" style="grid-template-columns: 1fr;">
             <div class="content-box">
                 <h2>Rincian Penjualan per Produk</h2>
-                <ul class="data-list">
-                    <li>
-                        <span class="data-name">Lenovo ThinkPad X1</span>
-                        <span class="data-value">1 Terjual</span>
-                    </li>
-                    <li>
-                        <span class="data-name">Dell XPS 13</span>
-                        <span class="data-value">1 Terjual</span>
-                    </li>
+                <ul class="data-list" id="product-list">
+                    <!-- Data produk dimuat otomatis dari JavaScript -->
                 </ul>
             </div>
         </div>
@@ -346,14 +339,57 @@
     </div>
 
     <script>
-        // Mempertahankan nilai tanggal yang dipilih setelah halaman dimuat ulang
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const dateParam = urlParams.get('date');
             if (dateParam) {
                 document.getElementById('date-filter').value = dateParam;
             }
+
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            renderAnalytics(orders, dateParam);
         });
+
+        function renderAnalytics(orders, filterDate) {
+            let totalOrder = 0;
+            let totalPendapatan = 0;
+            const productCounts = {};
+
+            orders.forEach(order => {
+                if (filterDate && order.tanggal !== filterDate) return;
+
+                totalOrder++;
+                totalPendapatan += parseInt(order.harga);
+
+                if (productCounts[order.produk]) {
+                    productCounts[order.produk]++;
+                } else {
+                    productCounts[order.produk] = 1;
+                }
+            });
+
+            document.getElementById('stat-total-order').innerHTML = `${totalOrder} <span style="font-size:14px; color:var(--text-muted); font-weight:500; text-transform:uppercase; letter-spacing:1px; text-shadow:none;">transaksi</span>`;
+            document.getElementById('stat-total-pendapatan').textContent = 'Rp ' + totalPendapatan.toLocaleString('id-ID');
+
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            const products = Object.keys(productCounts);
+            if (products.length === 0) {
+                productList.innerHTML = '<li style="justify-content: center; color: var(--text-muted);">Belum ada data penjualan pada tanggal ini</li>';
+            } else {
+                products.sort((a, b) => productCounts[b] - productCounts[a]);
+
+                products.forEach(prod => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="data-name">${prod}</span>
+                        <span class="data-value">${productCounts[prod]} Terjual</span>
+                    `;
+                    productList.appendChild(li);
+                });
+            }
+        }
     </script>
 </body>
 
