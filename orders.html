@@ -353,12 +353,12 @@
         <div class="card-box">
             <div class="stat-card">
                 <h3>Total Order Berhasil</h3>
-                <h1>2</h1>
+                <h1 id="stat-total-order">2</h1>
             </div>
 
             <div class="stat-card green">
                 <h3>Total Pendapatan (Estimasi)</h3>
-                <h1>
+                <h1 id="stat-total-pendapatan">
                     Rp 26.500.000
                 </h1>
             </div>
@@ -366,47 +366,19 @@
 
         <div class="table-container">
             <table>
-                <tr>
-                    <th>Nama Pemesan</th>
-                    <th>Alamat</th>
-                    <th>Produk</th>
-                    <th>Pembayaran</th>
-                    <th>Harga</th>
-                    <th class="action-column">Aksi</th>
-                </tr>
-
-                <!-- Mock Order 1 -->
-                <tr>
-                    <td style="font-weight: 600;">Budi Santoso</td>
-                    <td style="color: var(--gray); font-size: 14px; max-width: 300px;">Jl. Sudirman No. 1, Jakarta Pusat</td>
-                    <td>
-                        <span class="badge">Lenovo ThinkPad X1</span>
-                    </td>
-                    <td>Transfer Bank</td>
-                    <td class="price-text">Rp 14.500.000</td>
-                    <td class="action-buttons">
-                        <a href="edit_order.html" class="btn-sm btn-edit">Edit</a>
-                        <a href="javascript:alert('Dihapus');" class="btn-sm btn-delete">Hapus</a>
-                        <a href="print_order.html" target="_blank" class="btn-sm btn-outline" style="padding: 6px 12px; font-size: 12px;">Cetak Nota</a>
-                    </td>
-                </tr>
-                
-                <!-- Mock Order 2 -->
-                <tr>
-                    <td style="font-weight: 600;">Siti Aminah</td>
-                    <td style="color: var(--gray); font-size: 14px; max-width: 300px;">Jl. Malioboro No. 2, Yogyakarta</td>
-                    <td>
-                        <span class="badge">Dell XPS 13</span>
-                    </td>
-                    <td>COD</td>
-                    <td class="price-text">Rp 12.000.000</td>
-                    <td class="action-buttons">
-                        <a href="edit_order.html" class="btn-sm btn-edit">Edit</a>
-                        <a href="javascript:alert('Dihapus');" class="btn-sm btn-delete">Hapus</a>
-                        <a href="print_order.html" target="_blank" class="btn-sm btn-outline" style="padding: 6px 12px; font-size: 12px;">Cetak Nota</a>
-                    </td>
-                </tr>
-
+                <thead>
+                    <tr>
+                        <th>Nama Pemesan</th>
+                        <th>Alamat</th>
+                        <th>Produk</th>
+                        <th>Pembayaran</th>
+                        <th>Harga</th>
+                        <th class="action-column">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table-body">
+                    <!-- Data pesanan akan dimuat secara dinamis oleh JavaScript -->
+                </tbody>
             </table>
         </div>
 
@@ -426,14 +398,119 @@
     </div>
 
     <script>
-        // Mempertahankan nilai tanggal yang dipilih setelah halaman dimuat ulang
+        // Data default jika localStorage kosong
+        const defaultOrders = [
+            {
+                id: '1',
+                nama: 'Budi Santoso',
+                alamat: 'Jl. Sudirman No. 1, Jakarta Pusat',
+                produk: 'Lenovo ThinkPad X1',
+                metode: 'Transfer Bank',
+                harga: 14500000,
+                tanggal: '2026-05-16'
+            },
+            {
+                id: '2',
+                nama: 'Siti Aminah',
+                alamat: 'Jl. Malioboro No. 2, Yogyakarta',
+                produk: 'Dell XPS 13',
+                metode: 'COD',
+                harga: 12000000,
+                tanggal: '2026-05-16'
+            }
+        ];
+
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const dateParam = urlParams.get('date');
+            
+            // Periksa jika ada submission dari form tanpa JS (fallback)
+            const nama = urlParams.get('nama');
+            const alamat = urlParams.get('alamat');
+            const metode = urlParams.get('metode');
+            const tanggalParam = urlParams.get('tanggal');
+
+            let orders = JSON.parse(localStorage.getItem('orders'));
+            
+            if (!orders || orders.length === 0) {
+                orders = defaultOrders;
+                localStorage.setItem('orders', JSON.stringify(orders));
+            }
+
+            // Fallback penambahan data dari URL GET lama (jika ada)
+            if (nama && alamat && metode && tanggalParam && !dateParam) {
+                const newOrder = {
+                    id: Date.now().toString(),
+                    nama: nama,
+                    alamat: alamat,
+                    produk: 'Lenovo ThinkPad X1',
+                    metode: metode,
+                    harga: 14500000,
+                    tanggal: tanggalParam
+                };
+                orders.push(newOrder);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                // Bersihkan URL dari data form yang submit via GET lama
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
             if (dateParam) {
                 document.getElementById('date-filter').value = dateParam;
             }
+
+            renderOrders(orders, dateParam);
         });
+
+        function renderOrders(orders, filterDate) {
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = ''; // Kosongkan isi saat ini
+
+            let totalOrder = 0;
+            let totalPendapatan = 0;
+
+            orders.forEach(order => {
+                if (filterDate && order.tanggal !== filterDate) return;
+
+                totalOrder++;
+                totalPendapatan += parseInt(order.harga);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600;">${order.nama}</td>
+                    <td style="color: var(--gray); font-size: 14px; max-width: 300px;">${order.alamat}</td>
+                    <td>
+                        <span class="badge">${order.produk}</span>
+                    </td>
+                    <td>${order.metode}</td>
+                    <td class="price-text">Rp ${parseInt(order.harga).toLocaleString('id-ID')}</td>
+                    <td class="action-buttons">
+                        <a href="edit_order.html?id=${order.id}" class="btn-sm btn-edit">Edit</a>
+                        <a href="javascript:deleteOrder('${order.id}');" class="btn-sm btn-delete">Hapus</a>
+                        <a href="print_order.html?id=${order.id}" target="_blank" class="btn-sm btn-outline" style="padding: 6px 12px; font-size: 12px;">Cetak Nota</a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update stats
+            document.getElementById('stat-total-order').textContent = totalOrder;
+            document.getElementById('stat-total-pendapatan').textContent = 'Rp ' + totalPendapatan.toLocaleString('id-ID');
+
+            if (totalOrder === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state" style="text-align: center; padding: 40px;"><h3 style="margin-bottom:10px;">Belum ada pesanan</h3><p style="color:var(--gray);">Pesanan yang cocok dengan filter akan muncul di sini</p></td></tr>';
+            }
+        }
+
+        function deleteOrder(id) {
+            if (confirm('Yakin ingin menghapus order ini?')) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders = orders.filter(o => o.id !== id);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                renderOrders(orders, urlParams.get('date'));
+            }
+        }
     </script>
 </body>
 
