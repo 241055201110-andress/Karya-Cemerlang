@@ -195,6 +195,18 @@
         const displayDate = `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
         document.getElementById('top-date-display').innerHTML = `📅 ${displayDate}`;
 
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('name') || 'Laptop Seken';
+        const productPrice = urlParams.get('price') || '0';
+        const productImage = urlParams.get('img') || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80';
+
+        // Update preview content
+        document.querySelector('.product-details h3').innerText = productName;
+        document.querySelector('.product-price').innerText = `Rp ${parseInt(productPrice).toLocaleString('id-ID')}`;
+        document.querySelector('.product-image-container img').src = productImage;
+        document.querySelector('.product-image-container img').alt = productName;
+
         // Intercept form submission
         const form = document.querySelector('form');
         form.addEventListener('submit', function(e) {
@@ -207,8 +219,8 @@
                 alamat: formData.get('alamat'),
                 metode: formData.get('metode'),
                 tanggal: formData.get('tanggal'),
-                produk: 'Lenovo ThinkPad X1', // Sesuai produk di halaman ini
-                harga: 14500000
+                produk: productName,
+                harga: parseInt(productPrice)
             };
             
             let orders = JSON.parse(localStorage.getItem('orders')) || [];
