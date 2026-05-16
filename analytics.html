@@ -345,6 +345,16 @@
 
     </div>
 
+    <script>
+        // Mempertahankan nilai tanggal yang dipilih setelah halaman dimuat ulang
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dateParam = urlParams.get('date');
+            if (dateParam) {
+                document.getElementById('date-filter').value = dateParam;
+            }
+        });
+    </script>
 </body>
 
 </html>
