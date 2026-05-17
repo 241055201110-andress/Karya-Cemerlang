@@ -683,15 +683,40 @@
     </main>
 
     <!-- SPONSORS SECTION -->
+    <style>
+        .sponsor-logo {
+            height: 35px;
+            object-fit: contain;
+            filter: brightness(0) invert(1) opacity(0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .sponsor-logo:hover {
+            filter: brightness(0) invert(1) opacity(1) drop-shadow(0 0 10px rgba(255,255,255,0.4));
+            transform: translateY(-3px) scale(1.05);
+        }
+    </style>
     <section class="sponsors-section">
         <div class="sponsors-title">Sponsor Resmi</div>
         <div class="sponsors-grid">
-            <div class="sponsor-item">ASUS ROG</div>
-            <div class="sponsor-item">Lenovo Legion</div>
-            <div class="sponsor-item">HP Omen</div>
-            <div class="sponsor-item">Dell Alienware</div>
-            <div class="sponsor-item">Acer Predator</div>
-            <div class="sponsor-item">MSI</div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/ASUS_Logo.svg" alt="ASUS" class="sponsor-logo">
+            </div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lenovo_logo_2015.svg" alt="Lenovo" class="sponsor-logo" style="height: 28px;">
+            </div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" alt="HP" class="sponsor-logo" style="height: 40px;">
+            </div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Dell_logo_2016.svg" alt="Dell" class="sponsor-logo" style="height: 40px;">
+            </div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Acer_2011.svg" alt="Acer" class="sponsor-logo">
+            </div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/MSI_logo.svg" alt="MSI" class="sponsor-logo">
+            </div>
         </div>
     </section>
 
